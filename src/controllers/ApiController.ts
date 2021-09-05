@@ -6,7 +6,7 @@ const retrieveElements = async (req: Request, res: Response) => {
     try
     {
         // get parameters from request
-        const url = req?.body?.url ?? '';
+        const url = req?.body?.url ?? 'http://192.168.10.62:4714/bim/';
         const method = req?.body?.method ?? 'GET';
         const rgoc = req?.body?.rgoc ?? '';
         const rmodel = req?.body?.rmodel ?? '';
@@ -17,16 +17,16 @@ const retrieveElements = async (req: Request, res: Response) => {
 
             // 1st call to retrieve count elements
 
-            const urlTotal = `http://192.168.10.62/${rgoc}.${rmodel}`;
+            const urlTotal = `http://192.168.10.62:4714/bim/${rgoc}.${rmodel}`;
             console.log(`[${rgoc}] [${rmodel}] : url : ${urlTotal}`);
 
-            const totalElements = await axios.get('');
+            const totalElements = await axios.get(urlTotal + '/statistics');
             console.log(`[${rgoc}] [${rmodel}] : total elements : ${totalElements}`);
             // prepare all promises to retrieves parameters
 
             const LIMIT_ELEMENTS_SIZE = 1000;
             const promisesElements = [];
-            const urlElement = `http://192.168.10.62/${rgoc}.${rmodel}/`;
+            const urlElement = `http://192.168.10.62:4714/bim/${rgoc}.${rmodel}/`;
             let start = 0;
             let elements = null;
             let testElements = [];
@@ -63,6 +63,26 @@ const retrieveElements = async (req: Request, res: Response) => {
 
 
 
+const bench = async (req: Request, res: Response) => {
+    const t0 = new Date();
+    const urlToBench = '';
+
+    // TODO get memory usage
+
+
+
+    const t = new Date();
+    const timeRequest = (t - t0);
+    console.log('time request : ', timeRequest);
+
+    const stats = {
+        timeRequest
+    }
+
+    return stats;
+}
+
 module.exports = {
-    retrieveElements
+    retrieveElements,
+    bench
 }
